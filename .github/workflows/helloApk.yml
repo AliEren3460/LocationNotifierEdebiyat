@@ -1,0 +1,72 @@
+name: Hello World APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    
+    - name: Install Java
+      run: |
+        sudo apt update
+        sudo apt install -y openjdk-8-jdk
+        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+    
+    - name: Create Hello World App
+      run: |
+        cat > main.py << 'EOF'
+        from kivy.app import App
+        from kivy.uix.label import Label
+
+        class HelloApp(App):
+            def build(self):
+                return Label(text='Merhaba Dünya!\nKonum Takip Uygulaması')
+
+        HelloApp().run()
+        EOF
+        
+        cat > buildozer.spec << 'EOF'
+        [app]
+        title = Hello World
+        package.name = helloworld
+        package.domain = org.example
+        source.dir = .
+        version = 0.1
+        requirements = python3,kivy
+        
+        android.api = 28
+        android.minapi = 21
+        android.ndk = 19b
+        android.accept_sdk_license = True
+        
+        [buildozer]
+        log_level = 1
+        EOF
+    
+    - name: Install Buildozer
+      run: |
+        pip install buildozer==1.3.0
+        pip install cython==0.29.33
+    
+    - name: Build
+      run: |
+        buildozer android debug
+      env:
+        JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+    
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: hello-apk
+        path: bin/*.apk
