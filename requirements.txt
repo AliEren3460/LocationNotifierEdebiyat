@@ -1,0 +1,9 @@
+# Windows için güncellenmiş requirements
+kivy[base]==2.2.0
+kivymd==1.1.1
+requests==2.31.0
+plyer==2.1.0
+
+# Android build için (sadece build sırasında gerekli)
+# pyjnius - buildozer tarafından otomatik yüklenecek
+# android - buildozer tarafından otomatik yüklenecek

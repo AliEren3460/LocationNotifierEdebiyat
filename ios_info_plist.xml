@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Uygulama bilgileri -->
+    <key>CFBundleName</key>
+    <string>Konum Takip</string>
+    
+    <key>CFBundleDisplayName</key>
+    <string>Konum Takip</string>
+    
+    <key>CFBundleIdentifier</key>
+    <string>com.example.locationtracker</string>
+    
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    
+    <!-- Konum izinleri -->
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Bu uygulama konumunuzu takip etmek ve size düzenli bildirimler göndermek için konum erişimine ihtiyaç duyar.</string>
+    
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Bu uygulama aktif olduğunda konumunuzu almak için konum erişimine ihtiyaç duyar.</string>
+    
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Bu uygulama arka planda çalışırken konumunuzu takip etmek için sürekli konum erişimine ihtiyaç duyar.</string>
+    
+    <!-- Arka plan modları -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>location</string>
+        <string>background-fetch</string>
+        <string>background-processing</string>
+    </array>
+    
+    <!-- Bildirim izinleri -->
+    <key>UIUserNotificationSettings</key>
+    <dict>
+        <key>UIUserNotificationTypeAlert</key>
+        <true/>
+        <key>UIUserNotificationTypeBadge</key>
+        <true/>
+        <key>UIUserNotificationTypeSound</key>
+        <true/>
+    </dict>
+    
+    <!-- Ağ erişimi -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    
+    <!-- Desteklenen yönelimler -->
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+    </array>
+    
+    <!-- Minimum iOS versiyonu -->
+    <key>MinimumOSVersion</key>
+    <string>12.0</string>
+    
+</dict>
+</plist>
