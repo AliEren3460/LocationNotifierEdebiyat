@@ -1,0 +1,68 @@
+name: Simple APK Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        sudo apt update -qq
+        sudo apt install -y openjdk-8-jdk unzip wget
+        python -m pip install --upgrade pip
+        pip install kivy[base]==2.1.0
+        pip install buildozer==1.4.0
+    
+    - name: Create ultra simple app
+      run: |
+        cat > main.py << 'EOF'
+        from kivy.app import App
+        from kivy.uix.label import Label
+
+        class MyApp(App):
+            def build(self):
+                return Label(text='Konum Takip\nUygulaması Çalışıyor!')
+
+        MyApp().run()
+        EOF
+    
+    - name: Create minimal buildozer.spec
+      run: |
+        cat > buildozer.spec << 'EOF'
+        [app]
+        title = KonumTakip
+        package.name = konumtakip
+        package.domain = com.example
+        source.dir = .
+        version = 1.0
+        requirements = python3,kivy
+        
+        [buildozer]
+        log_level = 1
+        EOF
+    
+    - name: Build APK
+      run: |
+        buildozer android debug
+      env:
+        ANDROID_ACCEPT_SDK_LICENSE: 'y'
+        BUILDOZER_ACCEPT_SDK_LICENSE: '1'
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: simple-apk
+        path: bin/*.apk
