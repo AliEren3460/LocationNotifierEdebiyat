@@ -1,0 +1,65 @@
+name: Docker APK Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Build APK with Docker
+      run: |
+        # Minimal main.py oluştur
+        cat > main.py << 'EOF'
+        from kivy.app import App
+        from kivy.uix.label import Label
+        from kivy.uix.boxlayout import BoxLayout
+        from kivy.uix.button import Button
+
+        class LocationApp(App):
+            def build(self):
+                layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
+                
+                title = Label(
+                    text='Konum Takip Uygulaması',
+                    size_hint=(1, 0.3),
+                    font_size='20sp'
+                )
+                
+                start_btn = Button(
+                    text='Konum Takibini Başlat',
+                    size_hint=(1, 0.3),
+                    font_size='16sp'
+                )
+                
+                stop_btn = Button(
+                    text='Konum Takibini Durdur',
+                    size_hint=(1, 0.3),
+                    font_size='16sp'
+                )
+                
+                layout.add_widget(title)
+                layout.add_widget(start_btn)
+                layout.add_widget(stop_btn)
+                
+                return layout
+
+        LocationApp().run()
+        EOF
+        
+        # Docker ile build
+        docker run --rm -v "$(pwd)":/home/user/hostcwd \
+          kivy/buildozer android debug
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-apk
+        path: bin/*.apk
+        retention-days: 30
